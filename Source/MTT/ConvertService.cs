@@ -36,6 +36,11 @@ namespace MTT
         /// </summary>
         public PathStyle PathStyle { get; set; }
 
+        /// <summary>
+        /// Determines whether to generate numeric or string values in typescript enums
+        /// </summary>
+        public EnumValues EnumValues { get; internal set; }
+
         private List<ModelFile> Models { get; set; }
 
         private string LocalWorkingDir { get; set; }
@@ -444,10 +449,17 @@ namespace MTT
                         {
                             if (!String.IsNullOrEmpty(obj.Name))
                             {  //not an empty obj
-                                var str =
-                                    ToCamelCase(obj.Name)
-                                    + (obj.IsImplicit ? "" : (" = " + obj.Value))
-                                    + ",";
+                                var tsName = ToCamelCase(obj.Name);
+                                var str = tsName;
+                                if (EnumValues == EnumValues.Strings)
+                                {
+                                    str += " = '" + tsName + "'";
+                                }
+                                else if (!obj.IsImplicit)
+                                {
+                                    str += " = " + obj.Value;
+                                }
+                                str += ",";
 
                                 f.WriteLine("    " + str);
                             }
