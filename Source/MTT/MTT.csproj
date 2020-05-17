@@ -19,7 +19,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Description>Converts C# DTOs to Typescript Interfaces using MSBUILD Tasks.</Description>
     <PackageProjectUrl>https://github.com/ItielBeeri/MTT</PackageProjectUrl>
-    <Version>0.6.3</Version>
+    <Version>0.6.6</Version>
     <PackageId>Ziv.MTT</PackageId>
   </PropertyGroup>
 

@@ -471,22 +471,22 @@ namespace MTT
                     else
                     {
 
+                        if (!String.IsNullOrEmpty(file.Inherits))
+                        {
+                            importing = true;
+                            var import = "import { " + file.Inherits + " } from '"
+                                + (PathStyle == PathStyle.Kebab ? ToKebabCasePath(file.InheritenceStructure) : file.InheritenceStructure) + "';";
+
+                            if (!imports.Contains(import))
+                            {
+                                f.WriteLine(import);
+                                imports.Add(import);
+                            }
+                        }
+
                         foreach (var obj in file.Objects)
                         {
-                            if (!String.IsNullOrEmpty(file.Inherits))
-                            {
-                                importing = true;
-                                var import = "import { " + file.Inherits + " } from '"
-                                    + (PathStyle == PathStyle.Kebab ? ToKebabCasePath(file.InheritenceStructure) : file.InheritenceStructure) + "';";
-
-                                if (!imports.Contains(import))
-                                {
-                                    f.WriteLine(import);
-                                    imports.Add(import);
-                                }
-                            }
-
-                            if (obj.UserDefined)
+                            if (obj.UserDefined && obj.Type != file.Name)
                             {
                                 importing = true;
                                 var import = "import { " + obj.Type + " } from '"
@@ -648,12 +648,12 @@ namespace MTT
 
         private bool IsEnumObject(string line)
         {
-            return 
+            return
                 !String.IsNullOrWhiteSpace(line)
                 && !line.StrictContains("enum")
                 && !line.StrictContains("namespace")
                 && !line.StrictContains("using")
-                && !IsContructor(line) 
+                && !IsContructor(line)
                 && !line.Contains("{") && !line.Contains("}")
                 && !line.Contains("[") && !line.Contains("]");
         }
