@@ -133,17 +133,27 @@ namespace MTT
 
         private void DeleteDirectory(string path, int iteration)
         {
-            foreach (string directory in Directory.GetDirectories(path))
+            if (!Directory.Exists(path))
             {
-                DeleteDirectory(directory, 0);
+                return;
             }
 
             try
             {
+                foreach (string directory in Directory.GetDirectories(path))
+                {
+                    DeleteDirectory(directory, 0);
+                }
+
                 Directory.Delete(path, true);
             }
             catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
             {
+                if (!Directory.Exists(path))
+                {
+                    return;
+                }
+
                 if (iteration >= 10)
                 {
                     throw;
@@ -537,7 +547,7 @@ namespace MTT
 
         private void WriteEnumValuesClass(ModelFile file, string directoryPath, string baseFileName)
         {
-            string fileName = baseFileName  + ".enum-values.ts";
+            string fileName = baseFileName + ".enum-values.ts";
             log("Creating file {0}", fileName);
             string saveDir = Path.Combine(directoryPath, fileName);
 
