@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\..\artifacts\</PackageOutputPath>
     <!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll.-->
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <!-- Change the default location where NuGet will put the build output -->
     <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
     <!-- set the version automatically -->
-    <VersionPrefix>0.6.8</VersionPrefix>
+    <VersionPrefix>0.6.11</VersionPrefix>
     <!-- 
         The suffix is required because nuget will only update if the package is newer, this tricks it. 
         note: 0.1.5 has precedence over 0.1.5-build123412341  
@@ -19,7 +19,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Description>Converts C# DTOs to Typescript Interfaces using MSBUILD Tasks.</Description>
     <PackageProjectUrl>https://github.com/ItielBeeri/MTT</PackageProjectUrl>
-    <Version>0.6.8</Version>
+    <Version>0.6.11</Version>
     <PackageId>Ziv.MTT</PackageId>
   </PropertyGroup>
 

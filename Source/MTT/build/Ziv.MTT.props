@@ -4,7 +4,7 @@
 -->
 <Project TreatAsLocalProperty="TaskFolder;TaskAssembly">
   <PropertyGroup>
-    <TaskFolder>netstandard1.6</TaskFolder>
+    <TaskFolder>netstandard2.0</TaskFolder>
     <TaskAssembly>$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\MTT.dll</TaskAssembly>
   </PropertyGroup>
 
