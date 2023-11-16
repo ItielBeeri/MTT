@@ -224,8 +224,15 @@ namespace MTT
         {
             foreach (var file in Models)
             {
+                bool obsoleteFlag = false;
                 foreach (var _line in file.Info)
                 {
+                    if (obsoleteFlag)
+                    {
+                        obsoleteFlag = false;
+                        continue;
+                    }
+
                     var line = StripComments(_line);
 
                     if (line.IsPreProcessorDirective())
@@ -331,6 +338,11 @@ namespace MTT
                         }
                     }
 
+                    // obsolete attribute
+                    if (Regex.IsMatch(line, @"\[(.*)Obsolete(.*)\]"))
+                    {
+                        obsoleteFlag = true;
+                    }
                     // Class property
                     if (line.StrictContains("public") && !line.StrictContains("class") && !IsMethod(line))
                     {
