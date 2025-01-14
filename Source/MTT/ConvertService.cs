@@ -354,6 +354,13 @@ namespace MTT
                             type = modLine[0];
                         }
 
+                        /** If the property is marked override, skip the override keyword. */
+                        if (type.Equals("override"))
+                        {
+                            modLine.RemoveAt(0);
+                            type = modLine[0];
+                        }
+
                         bool IsArray = CheckIsArray(type);
 
                         bool isOptional = CheckOptional(type);
