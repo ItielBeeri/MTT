@@ -47,6 +47,24 @@ namespace MSBuildTasks
             set => _enumValues = (EnumValues)Enum.Parse(typeof(EnumValues), value);
         }
 
+        private string _lineEnding = "\n";
+
+        public string LineEnding
+        {
+            get => _lineEnding switch
+            {
+                "\n" => "LF",
+                "\r\n" => "CRLF",
+                _ => throw new ArgumentOutOfRangeException(nameof(_lineEnding), $"Unexpected line ending value: {_lineEnding}")
+            };
+            set => _lineEnding = value switch
+            {
+                "LF" => "\n",
+                "CRLF" => "\r\n",
+                _ => throw new ArgumentOutOfRangeException(nameof(value), $"Unexpected line ending label: {value}")
+            };
+        }
+
         protected MessageImportance LoggingImportance { get; } = MessageImportance.High;  //If its not high then there are no logs
 
         private readonly ConvertService convertService;
@@ -65,6 +83,7 @@ namespace MSBuildTasks
             convertService.WorkingDirectory = WorkingDirectory;
             convertService.PathStyle = _pathStyle;
             convertService.EnumValues = _enumValues;
+            convertService.LineEnding = _lineEnding;
 
             var result = convertService.Execute();
 

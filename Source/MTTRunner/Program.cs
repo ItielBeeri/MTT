@@ -23,7 +23,9 @@ namespace MTTRunner
             var convertService = new ConvertService((logString, logArgs) => Console.WriteLine(logString, logArgs))
             {
                 WorkingDirectory = args[0],
-                ConvertDirectory = args[1]
+                ConvertDirectory = args[1],
+                PathStyle = PathStyle.Kebab,
+                EnumValues = EnumValues.Strings
             };
             
             convertService.Execute();
