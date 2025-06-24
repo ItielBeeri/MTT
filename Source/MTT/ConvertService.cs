@@ -279,7 +279,7 @@ namespace MTT
                             line += " " + nextLine; // Append the next line to the current line
                             if (nextLine.Contains("]"))
                             {
-                                i = j - 1; // Skip to the line with the opening brace
+                                i = j;
                                 break;
                             }
                         }
@@ -315,7 +315,7 @@ namespace MTT
                                 continue;
                             }
 
-                            if (line.Contains("[") && !line.Contains("]"))
+                            if (enumLine.Contains("[") && !enumLine.Contains("]"))
                             {
                                 for (int n = m + 1; n < file.Info.Length; n++)
                                 {
@@ -327,7 +327,7 @@ namespace MTT
                                     enumLine += " " + nextLine; // Append the next line to the current line
                                     if (nextLine.Contains("]"))
                                     {
-                                        m = n - 1; // Skip to the line with the opening brace
+                                        m = n;
                                         break;
                                     }
                                 }
@@ -411,6 +411,26 @@ namespace MTT
                     // Class property
                     if (line.StrictContains("public") && !line.StrictContains("class") && !IsMethod(line))
                     {
+                        if (line.Contains("<") && !line.Contains(">"))
+                        {
+                            for (int j = i + 1; j < file.Info.Length; j++)
+                            {
+                                var nextLine = StripComments(file.Info[j]);
+                                if (nextLine.IsPreProcessorDirective())
+                                {
+                                    continue; // Skip preprocessor directives
+                                }
+                                line += " " + nextLine; // Append the next line to the current line
+                                if (nextLine.Contains(">"))
+                                {
+                                    i = j;
+                                    break;
+                                }
+                            }
+                        }
+
+                        modLine = new List<string>(ExplodeLine(line));
+
                         string type = modLine[0];
                         /** If the property is marked virtual, skip the virtual keyword. */
                         if (type.Equals("virtual"))
@@ -810,9 +830,16 @@ namespace MTT
 
         private string[] ExplodeLine(string line)
         {
+            // Replace multiple consecutive whitespaces with a single space
+            var normalizedWhitespace = Regex.Replace(line, @"\s+", " ");
+            
+            // Remove spaces after '<' and before '>'
+            normalizedWhitespace = Regex.Replace(normalizedWhitespace, @"< ", "<");
+            normalizedWhitespace = Regex.Replace(normalizedWhitespace, @" >", ">");
+            
+            // Handle commas with optional spaces around them
             var regex = new Regex("\\s*,\\s*");
-
-            var l = regex.Replace(line, ",");
+            var l = regex.Replace(normalizedWhitespace, ",");
 
             return l
                 .Replace("public", String.Empty)
