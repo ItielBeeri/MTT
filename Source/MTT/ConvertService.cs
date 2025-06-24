@@ -304,7 +304,7 @@ namespace MTT
                         file.IsEnum = true;
 
                         int value = 0;
-                        
+
                         for (int m = i; m < file.Info.Length; m++)
                         {
                             var _enumLine = file.Info[m];
@@ -441,6 +441,12 @@ namespace MTT
 
                         /** If the property is marked override, skip the override keyword. */
                         if (type.Equals("override"))
+                        {
+                            modLine.RemoveAt(0);
+                            type = modLine[0];
+                        }
+
+                        if (type.Equals("new"))
                         {
                             modLine.RemoveAt(0);
                             type = modLine[0];
@@ -832,11 +838,11 @@ namespace MTT
         {
             // Replace multiple consecutive whitespaces with a single space
             var normalizedWhitespace = Regex.Replace(line, @"\s+", " ");
-            
+
             // Remove spaces after '<' and before '>'
             normalizedWhitespace = Regex.Replace(normalizedWhitespace, @"< ", "<");
             normalizedWhitespace = Regex.Replace(normalizedWhitespace, @" >", ">");
-            
+
             // Handle commas with optional spaces around them
             var regex = new Regex("\\s*,\\s*");
             var l = regex.Replace(normalizedWhitespace, ",");
