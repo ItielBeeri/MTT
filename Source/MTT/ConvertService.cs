@@ -229,13 +229,13 @@ namespace MTT
         {
             foreach (var file in Models)
             {
-                bool obsoleteFlag = false;
+                bool skipFlag = false;
                 for (int i = 0; i < file.Info.Length; i++)
                 {
                     var _line = file.Info[i];
-                    if (obsoleteFlag)
+                    if (skipFlag)
                     {
-                        obsoleteFlag = false;
+                        skipFlag = false;
                         continue;
                     }
 
@@ -403,10 +403,10 @@ namespace MTT
                         }
                     }
 
-                    // obsolete attribute
-                    if (Regex.IsMatch(line, @"\[(.*)Obsolete(.*)\]"))
+                    // skip attributes
+                    if (Regex.IsMatch(line, @"\[(.*)Obsolete(.*)\]") || Regex.IsMatch(line, @"\[(.*)SkipGeneration(.*)\]"))
                     {
-                        obsoleteFlag = true;
+                        skipFlag = true;
                     }
                     // Class property
                     if (line.StrictContains("public") && !line.StrictContains("class") && !IsMethod(line))
